@@ -1,0 +1,42 @@
+name: mining-pools
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CGO_ENABLED: 0
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+
+      - name: Run miningpoolfinder CMD
+        run: |
+          go run .
+        working-directory: cmd/miningpoolfinder
+
+      - name: Create local changes
+        run: |
+          mkdir -p pool
+          mv cmd/miningpoolfinder/pools.json pool/pools.json
+          git fetch origin
+          git checkout -b data origin/data
+          git add pool/pools.json
+
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Update Pools Address [$(date)] :robot:" -a --allow-empty
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: data
