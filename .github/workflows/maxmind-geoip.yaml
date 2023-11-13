@@ -25,12 +25,13 @@ jobs:
 
       - name: Create local changes
         run: |
+          git fetch origin
+          git checkout -b data origin/data
+          
           mkdir -p geoip
           mv ./GeoLite2-Country_*/GeoLite2-Country.mmdb geoip/Country.mmdb
           mv ./GeoLite2-City_*/GeoLite2-City.mmdb geoip/City.mmdb
           mv ./GeoLite2-ASN_*/GeoLite2-ASN.mmdb geoip/ASN.mmdb
-          git fetch origin
-          git checkout -b data origin/data
           git add geoip/Country.mmdb geoip/City.mmdb geoip/ASN.mmdb
 
       - name: Commit files
