@@ -23,10 +23,10 @@ jobs:
 
       - name: Create local changes
         run: |
-          mkdir -p pool
-          mv cmd/miningpoolfinder/pools.json pool/pools.json
           git fetch origin
           git checkout -b data origin/data
+          mkdir -p pool
+          mv cmd/miningpoolfinder/pools.json pool/pools.json
           git add pool/pools.json
 
       - name: Commit files
