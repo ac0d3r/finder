@@ -23,10 +23,10 @@ jobs:
 
       - name: Create local changes
         run: |
-          mkdir -p cdncheck
-          mv cmd/cdncheck/rules.json cdncheck/rules.json
           git fetch origin
           git checkout -b data origin/data
+          mkdir -p cdncheck
+          mv cmd/cdncheck/rules.json cdncheck/rules.json
           git add cdncheck/rules.json
 
       - name: Commit files
